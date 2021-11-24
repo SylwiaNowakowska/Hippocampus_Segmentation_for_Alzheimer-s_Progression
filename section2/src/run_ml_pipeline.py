@@ -3,6 +3,7 @@ This file contains code that will kick off training and testing processes
 """
 import os
 import json
+from sklearn.model_selection import train_test_split
 
 from experiments.UNetExperiment import UNetExperiment
 from data_prep.HippocampusDatasetLoader import LoadHippocampusData
@@ -13,12 +14,12 @@ class Config:
     """
     def __init__(self):
         self.name = "Basic_unet"
-        self.root_dir = r"YOUR DIRECTORY HERE"
+        self.root_dir = r"../src/dataset"
         self.n_epochs = 10
         self.learning_rate = 0.0002
         self.batch_size = 8
         self.patch_size = 64
-        self.test_results_dir = "RESULTS GO HERE"
+        self.test_results_dir = "../out"
 
 if __name__ == "__main__":
     # Get configuration
@@ -30,7 +31,7 @@ if __name__ == "__main__":
     # Load data
     print("Loading data...")
 
-    # TASK: LoadHippocampusData is not complete. Go to the implementation and complete it. 
+    # TASK: LoadHippocampusData is not complete. Go to the implementation and complete it.
     data = LoadHippocampusData(c.root_dir, y_shape = c.patch_size, z_shape = c.patch_size)
 
 
@@ -48,7 +49,8 @@ if __name__ == "__main__":
     # TASK: create three keys in the dictionary: "train", "val" and "test". In each key, store
     # the array with indices of training volumes to be used for training, validation 
     # and testing respectively.
-    # <YOUR CODE GOES HERE>
+    split['train'], split['test'] = train_test_split(keys, test_size=0.2)
+    split['train'], split['val'] = train_test_split(split['train'], test_size=0.2)
 
     # Set up and run experiment
     
